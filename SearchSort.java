@@ -28,15 +28,37 @@ public class SearchSort {
 		}
 	}
 	
-	
-	public static boolean sorted(int[] array)
+	//sorted(float[] array) returns true if array has been sorted (ascending, or descending)
+	public static boolean sorted(float[] array)
 	{
+		int change = 0;
+		for(int i = 0; change == 0 && i < array.length; i++)
+		{
+			if(array[0] > array[i])
+				change = -1;
+			else if(array[0] < array[i])
+				change = 1;
+		}
+		if(change == 0)
+			return true;
+
 		for(int i = 0; i < array.length -1 ; i++)
 		{
-			if(array[i+1] < array[i])
+			if( change * (array[i+1] - array[i]) < 0)
 				return false;
 		}
 		return true;
+	}
+	
+	//sorted(ArrayList<Double> array) returns true if array has been sorted, and false otherwise
+	public static boolean sorted(ArrayList<Double> array)
+	{
+		float[] array_i = new float[array.size()];
+		for(int i = 0 ; i < array_i.length; i++)
+		{
+			array_i[i] = (array.get(i)).floatValue();
+		}
+		return sorted(array_i);
 	}
 	
 	//returns the first index i in array where array[i] == key, or -1 if no such element 
@@ -72,6 +94,7 @@ public class SearchSort {
 		return -1;
 	}
 	
+	//consumes an integer array and uses the merge-sort algorithm to recursively sort it
 	public static int[] mergeSort(int[] array){
 		if(array.length == 0 || array.length == 1)
 			return array;
@@ -177,4 +200,33 @@ public class SearchSort {
 		}
 	}
 	
+
+	//quicksort(array) consumes an ArrayList<Integer> array and returns the sorted array by 
+	//implementing the recursive quick-sort algorithm
+	public static ArrayList<Integer> quicksort(ArrayList<Integer> array )
+	{
+		if(array.size() <= 1)
+			return array;
+		
+		int pivot = array.get(0);
+		
+		ArrayList<Integer> less = new ArrayList<Integer>();
+		ArrayList<Integer> greater = new ArrayList<Integer>();
+		
+		for(int i = 0; i < array.size(); i++)
+		{
+			if(array.get(i) < pivot)
+				less.add(array.get(i));
+			else
+				greater.add(array.get(i));
+		}
+		
+		less = quicksort(less);
+		greater = quicksort(greater);
+		
+		array.clear();
+		array.addAll(less);
+		array.addAll(greater);
+		return array;
+	}
 }
